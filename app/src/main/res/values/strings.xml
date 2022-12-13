@@ -3,7 +3,7 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="all_news">Все новости</string>
+    <string name="all_news">Последнее</string>
     <string name="ixbt_news">ixbt.com</string>
     <string name="ferra_news">ferra.ru</string>
     <string name="td_news">3dnews.ru</string>

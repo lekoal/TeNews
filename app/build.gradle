@@ -24,6 +24,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildTypes.each {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("apikeys.properties").newDataInputStream())
+        def vk_api_key = properties.getProperty("VK_API_KEY", "")
+        it.buildConfigField "String", "VK_API_KEY", vk_api_key
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
