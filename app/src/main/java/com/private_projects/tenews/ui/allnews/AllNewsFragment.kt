@@ -1,60 +1,64 @@
 package com.private_projects.tenews.ui.allnews
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import com.private_projects.tenews.R
+import android.widget.Toast
+import androidx.paging.LoadState
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.private_projects.tenews.databinding.FragmentAllNewsBinding
+import com.private_projects.tenews.ui.main.MainActivity
+import com.private_projects.tenews.utils.ViewBindingFragment
+import org.koin.android.ext.android.getKoin
+import org.koin.core.qualifier.named
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AllNewsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class AllNewsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+class AllNewsFragment :
+    ViewBindingFragment<FragmentAllNewsBinding>(FragmentAllNewsBinding::inflate) {
+    private val scope by lazy {
+        getKoin().getOrCreateScope<AllNewsFragment>(SCOPE_ID)
     }
+    private val adapter: AllNewsPagerAdapter by lazy {
+        scope.get(named("all_news_adapter"))
+    }
+    private val viewModel: AllNewsViewModel by lazy {
+        scope.get(named("all_news_view_model"))
+    }
+    private lateinit var parentActivity: MainActivity
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_all_news, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        parentActivity = requireActivity() as MainActivity
+
+        initRV()
+        getNews()
+        itemClickListener()
+        showProgress()
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AllNewsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AllNewsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        private const val SCOPE_ID = "all_news_scope_id"
+    }
+
+    private fun initRV() {
+        binding.allNewsRv.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.allNewsRv.adapter = adapter
+    }
+
+    private fun getNews() {
+        viewModel.getNews().observe(viewLifecycleOwner) { pagingData ->
+            adapter.submitData(lifecycle, pagingData)
+        }
+    }
+
+    private fun itemClickListener() {
+        adapter.onItemClick = { list ->
+            Toast.makeText(requireContext(), list[1], Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun showProgress() {
+        adapter.addLoadStateListener { state ->
+            parentActivity.setProgress(state.refresh is LoadState.Loading)
+        }
     }
 }

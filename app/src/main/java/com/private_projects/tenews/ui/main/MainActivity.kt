@@ -1,11 +1,14 @@
 package com.private_projects.tenews.ui.main
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.material.tabs.TabLayoutMediator
 import com.private_projects.tenews.R
 import com.private_projects.tenews.databinding.ActivityMainBinding
+import org.koin.android.ext.android.getKoin
+import org.koin.core.qualifier.named
 
 const val ALL_NEWS_FRAGMENT = 0
 const val IXBT_NEWS_FRAGMENT = 1
@@ -13,6 +16,12 @@ const val FERRA_NEWS_FRAGMENT = 2
 const val TD_NEWS_FRAGMENT = 3
 
 class MainActivity : AppCompatActivity() {
+    private val scope by lazy {
+        getKoin().getOrCreateScope<MainActivity>(SCOPE_ID)
+    }
+    private val viewModel: MainViewModel by lazy {
+        scope.get(named("main_view_model"))
+    }
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val SCOPE_ID = "main_scope"
+        private const val SCOPE_ID = "main_scope_id"
     }
 
     private fun attachTabs() {
@@ -41,17 +50,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkProgress() {
-//        viewModel.loading.observe(this) { isLoading ->
-//            if (isLoading) {
-//                binding.blockScreen.visibility = View.VISIBLE
-//            } else {
-//                binding.blockScreen.visibility = View.GONE
-//            }
-//            binding.blockScreen.isClickable = isLoading
-//        }
+        viewModel.loading.observe(this) { isLoading ->
+            if (isLoading) {
+                binding.blockScreen.visibility = View.VISIBLE
+            } else {
+                binding.blockScreen.visibility = View.GONE
+            }
+            binding.blockScreen.isClickable = isLoading
+        }
     }
 
     fun setProgress(isShow: Boolean) {
-//        viewModel.load(isShow)
+        viewModel.load(isShow)
     }
 }
