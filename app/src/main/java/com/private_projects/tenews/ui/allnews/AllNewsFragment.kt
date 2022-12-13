@@ -45,7 +45,7 @@ class AllNewsFragment :
     }
 
     private fun getNews() {
-        viewModel.getNews().observe(viewLifecycleOwner) { pagingData ->
+        viewModel.getIxbtNews().observe(viewLifecycleOwner) { pagingData ->
             adapter.submitData(lifecycle, pagingData)
         }
     }
