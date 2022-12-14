@@ -13,9 +13,9 @@ class VkDataToAllNewsDTOConverter(
 ) {
     suspend fun convert(page: Int): List<VkAllNewsDTO> {
         val resultList = mutableListOf<VkAllNewsDTO>()
+        resultList.addAll(ixbtConverter(vkIxbtApi, page))
         resultList.addAll(ferraConverter(vkFerraApi, page))
         resultList.addAll(tdnewsConverter(vkTdnewsApi, page))
-        resultList.addAll(ixbtConverter(vkIxbtApi, page))
         resultList.forEach {
             println(it.title)
         }
@@ -30,9 +30,8 @@ class VkDataToAllNewsDTOConverter(
                 val id = item.id
                 val ownerDomain = VkHelpData.IXBT_DOMAIN
                 val date = item.date.toString()
-                val tempText = item.text.split("\n")
-                val title = tempText[0]
-                val description = tempText[2]
+                val title = item.text.substringBefore("\n")
+                val description = item.text.substringAfter("\n")
                 var imageUrl = ""
                 var newsUrl = ""
                 item.attachments.forEach { attachment ->

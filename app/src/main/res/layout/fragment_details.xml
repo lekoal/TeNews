@@ -5,12 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/brown_50"
     android:padding="10dp"
-    tools:context=".ui.allnews.AllNewsFragment">
+    tools:context=".ui.details.DetailsFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/all_news_rv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/news_rv_item" />
 
 </FrameLayout>
