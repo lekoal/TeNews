@@ -61,7 +61,7 @@ class TDNewsPagerAdapter :
             onItemClick?.invoke(
                 listOf(
                     newsUrl,
-                    title
+                    newsItem?.id.toString()
                 )
             )
         }

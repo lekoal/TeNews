@@ -61,7 +61,7 @@ class FerraPagerAdapter :
             onItemClick?.invoke(
                 listOf(
                     newsUrl,
-                    title
+                    newsItem?.id.toString()
                 )
             )
         }

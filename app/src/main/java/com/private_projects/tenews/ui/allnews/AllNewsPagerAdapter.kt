@@ -52,7 +52,7 @@ class AllNewsPagerAdapter :
             onItemClick?.invoke(
                 listOf(
                     newsItem?.newsUrl.toString(),
-                    newsItem?.title.toString()
+                    newsItem?.id.toString()
                 )
             )
         }
