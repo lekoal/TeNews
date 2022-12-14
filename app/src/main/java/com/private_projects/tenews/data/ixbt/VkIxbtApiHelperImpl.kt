@@ -21,5 +21,4 @@ class VkIxbtApiHelperImpl(private val vkIxbtApi: VkIxbtApi) : VkIxbtApiHelper {
             initialKey = 1
         ).liveData
     }
-
 }

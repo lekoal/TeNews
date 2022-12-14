@@ -21,5 +21,4 @@ class VkFerraApiHelperImpl(private val vkFerraApi: VkFerraApi) : VkFerraApiHelpe
             initialKey = 1
         ).liveData
     }
-
 }

@@ -21,5 +21,4 @@ class VkTdnewsApiHelperImpl(private val vkTdnewsApi: VkTdnewsApi) : VkTdnewsApiH
             initialKey = 1
         ).liveData
     }
-
 }
