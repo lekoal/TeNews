@@ -65,7 +65,8 @@ class IxbtPagerAdapter :
             onItemClick?.invoke(
                 listOf(
                     newsUrl,
-                    newsItem?.id.toString()
+                    newsItem?.id.toString(),
+                    VkHelpData.IXBT_DOMAIN
                 )
             )
         }

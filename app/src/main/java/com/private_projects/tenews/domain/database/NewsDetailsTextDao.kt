@@ -1,4 +1,4 @@
-package com.private_projects.tenews.domain.allnews
+package com.private_projects.tenews.domain.database
 
 import androidx.room.Dao
 import androidx.room.Insert

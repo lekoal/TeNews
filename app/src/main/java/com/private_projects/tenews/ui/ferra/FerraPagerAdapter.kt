@@ -61,7 +61,8 @@ class FerraPagerAdapter :
             onItemClick?.invoke(
                 listOf(
                     newsUrl,
-                    newsItem?.id.toString()
+                    newsItem?.id.toString(),
+                    VkHelpData.FERRA_DOMAIN
                 )
             )
         }

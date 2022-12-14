@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class HeaderBlockEntity(
     @PrimaryKey
     val newsId: Int,
+    val ownerDomain: String,
     val firstTitle: String,
     val secondTitle: String?
 )

@@ -61,7 +61,8 @@ class TDNewsPagerAdapter :
             onItemClick?.invoke(
                 listOf(
                     newsUrl,
-                    newsItem?.id.toString()
+                    newsItem?.id.toString(),
+                    VkHelpData.TDNEWS_DOMAIN
                 )
             )
         }
