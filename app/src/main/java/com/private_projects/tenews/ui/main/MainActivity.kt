@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.material.tabs.TabLayoutMediator
 import com.private_projects.tenews.R
 import com.private_projects.tenews.databinding.ActivityMainBinding
+import com.private_projects.tenews.ui.details.DetailsFragment
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 
@@ -62,5 +63,25 @@ class MainActivity : AppCompatActivity() {
 
     fun setProgress(isShow: Boolean) {
         viewModel.load(isShow)
+    }
+
+    fun showDetails(params: List<String>) {
+        supportFragmentManager.beginTransaction()
+            .add(binding.detailsContainer.id, DetailsFragment.newInstance(params))
+            .addToBackStack(null)
+            .commit()
+    }
+
+    fun blockDetails(isBlock: Boolean) {
+        if (isBlock) {
+            binding.detailsBlockScreen.visibility = View.VISIBLE
+            binding.detailsBlockScreen.isClickable = true
+            binding.detailsBlockScreen.setOnClickListener {
+                supportFragmentManager.popBackStack()
+            }
+        } else {
+            binding.detailsBlockScreen.visibility = View.GONE
+            binding.detailsBlockScreen.isClickable = false
+        }
     }
 }

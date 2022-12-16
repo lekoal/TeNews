@@ -2,6 +2,7 @@ package com.private_projects.tenews.ui
 
 import android.app.Application
 import com.private_projects.tenews.di.allnews.allNewsKoinModule
+import com.private_projects.tenews.di.details.detailsKoinModule
 import com.private_projects.tenews.di.ferra.ferraKoinModule
 import com.private_projects.tenews.di.ixbt.ixbtKoinModule
 import com.private_projects.tenews.di.main.mainKoinModule
@@ -21,7 +22,8 @@ class MainApplication : Application() {
                 ixbtKoinModule,
                 allNewsKoinModule,
                 ferraKoinModule,
-                tdNewsKoinModule
+                tdNewsKoinModule,
+                detailsKoinModule
             )
         }
     }

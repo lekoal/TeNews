@@ -16,9 +16,6 @@ class VkDataToAllNewsDTOConverter(
         resultList.addAll(ixbtConverter(vkIxbtApi, page))
         resultList.addAll(ferraConverter(vkFerraApi, page))
         resultList.addAll(tdnewsConverter(vkTdnewsApi, page))
-        resultList.forEach {
-            println(it.title)
-        }
         return resultList.sortedByDescending { it.date.toInt() }
     }
 

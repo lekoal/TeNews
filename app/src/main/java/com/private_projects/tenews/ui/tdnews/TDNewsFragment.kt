@@ -2,7 +2,6 @@ package com.private_projects.tenews.ui.tdnews
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.private_projects.tenews.databinding.FragmentTDNewsBinding
@@ -52,7 +51,7 @@ class TDNewsFragment :
 
     private fun itemClickListener() {
         adapter.onItemClick = { list ->
-            Toast.makeText(requireContext(), list[1], Toast.LENGTH_SHORT).show()
+            parentActivity.showDetails(list)
         }
     }
 
