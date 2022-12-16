@@ -62,7 +62,8 @@ class TDNewsPagerAdapter :
                 listOf(
                     newsUrl,
                     newsItem?.id.toString(),
-                    VkHelpData.TDNEWS_DOMAIN
+                    VkHelpData.TDNEWS_DOMAIN,
+                    date ?: ""
                 )
             )
         }

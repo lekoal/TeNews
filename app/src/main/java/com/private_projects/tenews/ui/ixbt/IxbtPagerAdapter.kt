@@ -66,7 +66,8 @@ class IxbtPagerAdapter :
                 listOf(
                     newsUrl,
                     newsItem?.id.toString(),
-                    VkHelpData.IXBT_DOMAIN
+                    VkHelpData.IXBT_DOMAIN,
+                    date ?: ""
                 )
             )
         }

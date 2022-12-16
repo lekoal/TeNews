@@ -53,7 +53,8 @@ class AllNewsPagerAdapter :
                 listOf(
                     newsItem?.newsUrl.toString(),
                     newsItem?.id.toString(),
-                    newsItem?.ownerDomain.toString()
+                    newsItem?.ownerDomain.toString(),
+                    date ?: ""
                 )
             )
         }

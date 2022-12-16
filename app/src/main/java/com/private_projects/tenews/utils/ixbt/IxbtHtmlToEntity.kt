@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.flow
 import org.jsoup.select.Elements
 
 class IxbtHtmlToEntity {
-    fun convert(elements: Elements, newsId: Int): Flow<NewsDetailsEntity> = flow {
+    fun convert(elements: Elements, newsId: Int, newsDate: String): Flow<NewsDetailsEntity> = flow {
         elements.forEach { element ->
             val texts = mutableListOf<TextBlockEntity>()
             val images = mutableListOf<ImageBlockEntity>()
@@ -16,7 +16,8 @@ class IxbtHtmlToEntity {
                 newsId = newsId,
                 ownerDomain = VkHelpData.IXBT_DOMAIN,
                 firstTitle = element.selectFirst("h1")?.text().toString(),
-                secondTitle = element.selectFirst("h4")?.text().toString()
+                secondTitle = element.selectFirst("h4")?.text().toString(),
+                newsDate = newsDate
             )
 
             element.select("div.b-article__content > *").forEachIndexed { index, elem ->

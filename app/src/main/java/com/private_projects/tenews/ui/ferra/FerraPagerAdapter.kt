@@ -62,7 +62,8 @@ class FerraPagerAdapter :
                 listOf(
                     newsUrl,
                     newsItem?.id.toString(),
-                    VkHelpData.FERRA_DOMAIN
+                    VkHelpData.FERRA_DOMAIN,
+                    date ?: ""
                 )
             )
         }

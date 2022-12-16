@@ -9,5 +9,6 @@ data class HeaderBlockEntity(
     val newsId: Int,
     val ownerDomain: String,
     val firstTitle: String,
-    val secondTitle: String?
+    val secondTitle: String?,
+    val newsDate: String
 )

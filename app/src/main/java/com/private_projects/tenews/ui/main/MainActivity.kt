@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 
     fun showDetails(params: List<String>) {
         supportFragmentManager.beginTransaction()
-            .add(binding.detailsContainer.id, DetailsFragment.newInstance(params))
+            .replace(binding.detailsContainer.id, DetailsFragment.newInstance(params))
             .addToBackStack(null)
             .commit()
     }

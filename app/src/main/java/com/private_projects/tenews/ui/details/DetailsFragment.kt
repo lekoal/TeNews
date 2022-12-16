@@ -47,14 +47,15 @@ class DetailsFragment :
         private const val SCOPE_ID = "details_scope_id"
         private const val NEWS_URL = "news_url"
         private const val NEWS_ID = "news_id"
+        private const val NEWS_DATE = "news_date"
         private const val NEWS_DOMAIN = "news_domain"
         fun newInstance(details: List<String>): DetailsFragment {
             val fragment = DetailsFragment()
-            println(details[2])
             fragment.arguments = Bundle()
             fragment.arguments?.putString(NEWS_URL, details[0])
             fragment.arguments?.putString(NEWS_ID, details[1])
             fragment.arguments?.putString(NEWS_DOMAIN, details[2])
+            fragment.arguments?.putString(NEWS_DATE, details[3])
             return fragment
         }
     }
@@ -63,7 +64,8 @@ class DetailsFragment :
         val params = listOf(
             this.arguments?.getString(NEWS_URL).toString(),
             this.arguments?.getString(NEWS_ID).toString(),
-            this.arguments?.getString(NEWS_DOMAIN).toString()
+            this.arguments?.getString(NEWS_DOMAIN).toString(),
+            this.arguments?.getString(NEWS_DATE).toString()
         )
         viewModel.getElements(params)
         viewModel.resultEntity.observe(viewLifecycleOwner) {
@@ -80,11 +82,15 @@ class DetailsFragment :
     private fun setViews(entity: NewsDetailsEntity) {
         binding.detailsFirstTitle.text = entity.header.firstTitle
         binding.detailsSecondTitle.text = entity.header.secondTitle
+        binding.detailAuthor.text = entity.header.ownerDomain
+        binding.detailsDate.text = entity.header.newsDate
+
         val textSize = entity.textBlocks?.size ?: 0
         val imageSize = entity.imageBlocks?.size ?: 0
         val videoSize = entity.videoBlocks?.size ?: 0
         val totalSize = textSize + imageSize + videoSize
         binding.detailsContent.let { layout ->
+            layout.removeAllViews()
             for (i in 0 until totalSize) {
                 entity.textBlocks?.forEach {
                     if (it.position == i) {
