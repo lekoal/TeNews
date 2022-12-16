@@ -19,12 +19,14 @@ class CommonHtmlConverter {
         params.let { list ->
             when (list[2]) {
                 VkHelpData.IXBT_DOMAIN -> {
-                    ixbtReceiver.convert(newsUrl, newsId, newsDate).collect {
+                    ixbtReceiver.receive(newsUrl, newsId, newsDate).collect {
                         emit(it)
                     }
                 }
                 VkHelpData.FERRA_DOMAIN -> {
-//                    emit(ferraConverter.convert(newsUrl, newsId))
+                    ferraReceiver.receive(newsUrl, newsId, newsDate).collect {
+                        emit(it)
+                    }
                 }
                 VkHelpData.TDNEWS_DOMAIN -> {
 //                    emit(tdnewsConverter.convert(newsUrl, newsId))

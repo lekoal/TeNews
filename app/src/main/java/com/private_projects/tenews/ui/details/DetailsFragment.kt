@@ -92,14 +92,6 @@ class DetailsFragment :
         binding.detailsContent.let { layout ->
             layout.removeAllViews()
             for (i in 0 until totalSize) {
-                entity.textBlocks?.forEach {
-                    if (it.position == i) {
-                        val textView = AppCompatTextView(requireContext())
-                        textView.textSize = 16F
-                        textView.text = it.content
-                        layout.addView(textView)
-                    }
-                }
                 entity.imageBlocks?.forEach {
                     if (it.position == i) {
                         val imageView = AppCompatImageView(requireContext())
@@ -112,6 +104,14 @@ class DetailsFragment :
                             .fitCenter()
                             .into(imageView)
                         layout.addView(imageView)
+                    }
+                }
+                entity.textBlocks?.forEach {
+                    if (it.position == i) {
+                        val textView = AppCompatTextView(requireContext())
+                        textView.textSize = 16F
+                        textView.text = it.content
+                        layout.addView(textView)
                     }
                 }
             }
