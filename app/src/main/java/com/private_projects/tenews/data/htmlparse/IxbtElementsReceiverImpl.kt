@@ -20,9 +20,7 @@ class IxbtElementsReceiverImpl: ElementsReceiver {
             connection.method(Connection.Method.GET)
             response = connection.execute()
             val document = connection.url(newsUrl).get()
-            document.let { doc ->
-                emit(doc.select("div.b-article"))
-            }
+            emit(document.select("div.b-article"))
         } catch (e: IOException) {
             e.printStackTrace()
         }

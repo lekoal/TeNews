@@ -29,7 +29,9 @@ class CommonHtmlConverter {
                     }
                 }
                 VkHelpData.TDNEWS_DOMAIN -> {
-//                    emit(tdnewsConverter.convert(newsUrl, newsId))
+                    tdnewsReceiver.receive(newsUrl, newsId, newsDate).collect {
+                        emit(it)
+                    }
                 }
             }
         }

@@ -101,6 +101,7 @@ class DetailsFragment :
                         )
                         Glide.with(imageView)
                             .load(it.url)
+                            .override(1400, 800)
                             .fitCenter()
                             .into(imageView)
                         layout.addView(imageView)

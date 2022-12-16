@@ -34,9 +34,9 @@ class IxbtPagerAdapter :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val newsItem = getItem(position)
-        val tempText = newsItem?.text?.split("\n\n")
-        val title = tempText?.get(0).toString()
-        val newsText = tempText?.get(1).toString()
+        val tempText = newsItem?.text.toString()
+        val title = tempText.substringBefore("\n")
+        val newsText = tempText.substringAfter("\n")
         var imageUrl = ""
         var newsUrl = ""
         newsItem?.attachments?.forEach { attachment ->
