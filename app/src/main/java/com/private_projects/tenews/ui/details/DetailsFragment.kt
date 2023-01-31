@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import com.bumptech.glide.Glide
+import com.private_projects.tenews.R
 import com.private_projects.tenews.data.details.NewsDetailsEntity
 import com.private_projects.tenews.databinding.FragmentDetailsBinding
 import com.private_projects.tenews.ui.main.MainActivity
@@ -111,8 +112,17 @@ class DetailsFragment :
                     if (it.position == i) {
                         val textView = AppCompatTextView(requireContext())
                         textView.textSize = 16F
-                        textView.text = it.content
-                        layout.addView(textView)
+                        if (
+                            it.content.contains("Фото:") ||
+                            it.content.contains("Источник изображений:") ||
+                            it.content.contains("Источник изображения:")
+                        ) {
+                            textView.text =
+                                requireActivity().getString(R.string.photo_source_text, it.content)
+                        } else {
+                            textView.text = it.content
+                        }
+                            layout.addView(textView)
                     }
                 }
             }

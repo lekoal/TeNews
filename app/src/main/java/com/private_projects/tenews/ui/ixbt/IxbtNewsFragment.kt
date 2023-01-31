@@ -2,10 +2,13 @@ package com.private_projects.tenews.ui.ixbt
 
 import android.os.Bundle
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.private_projects.tenews.R
 import com.private_projects.tenews.databinding.FragmentIxbtNewsBinding
 import com.private_projects.tenews.ui.main.MainActivity
+import com.private_projects.tenews.utils.ConnectionStatus
 import com.private_projects.tenews.utils.ViewBindingFragment
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
@@ -21,6 +24,9 @@ class IxbtNewsFragment :
     private val viewModel: IxbtViewModel by lazy {
         scope.get(named("ixbt_view_model"))
     }
+    private val connectionErrorScreen: ConstraintLayout by lazy {
+        requireActivity().findViewById(R.id.connection_error_block)
+    }
     private lateinit var parentActivity: MainActivity
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,6 +37,10 @@ class IxbtNewsFragment :
         getNews()
         itemClickListener()
         showProgress()
+        val connectionState = ConnectionStatus()
+        if (!connectionState.check(requireContext())) {
+            connectionErrorScreen.visibility = View.VISIBLE
+        }
     }
 
     companion object {

@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.private_projects.tenews.R
 import com.private_projects.tenews.databinding.ActivityMainBinding
 import com.private_projects.tenews.ui.details.DetailsFragment
+import com.private_projects.tenews.utils.ConnectionStatus
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 
@@ -23,6 +25,10 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by lazy {
         scope.get(named("main_view_model"))
     }
+    private val connectionErrorScreen: ConstraintLayout by lazy {
+        findViewById(R.id.connection_error_block)
+    }
+
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,10 +72,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showDetails(params: List<String>) {
-        supportFragmentManager.beginTransaction()
-            .replace(binding.detailsContainer.id, DetailsFragment.newInstance(params))
-            .addToBackStack(null)
-            .commit()
+        val connectionState = ConnectionStatus()
+        if (!connectionState.check(this)) {
+            connectionErrorScreen.visibility = View.VISIBLE
+        } else {
+            supportFragmentManager.beginTransaction()
+                .replace(binding.detailsContainer.id, DetailsFragment.newInstance(params))
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     fun blockDetails(isBlock: Boolean) {

@@ -16,7 +16,7 @@ class FerraHtmlToEntity {
                 newsId = newsId,
                 ownerDomain = VkHelpData.FERRA_DOMAIN,
                 firstTitle = element.selectFirst("h1")?.text().toString(),
-                secondTitle = element.selectFirst("span.jsx-3350499674")?.text().toString(),
+                secondTitle = element.selectFirst("span.subtitle")?.text().toString(),
                 newsDate = newsDate
             )
 
