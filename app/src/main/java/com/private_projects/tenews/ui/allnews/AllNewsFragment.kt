@@ -34,13 +34,17 @@ class AllNewsFragment :
         parentActivity = requireActivity() as MainActivity
 
         initRV()
-        getNews()
         itemClickListener()
         showProgress()
         val connectionState = ConnectionStatus()
         if (!connectionState.check(requireContext())) {
             connectionErrorScreen.visibility = View.VISIBLE
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getNews()
     }
 
     companion object {
@@ -56,6 +60,7 @@ class AllNewsFragment :
     private fun getNews() {
         viewModel.getAllNews().observe(viewLifecycleOwner) { pagingData ->
             adapter.submitData(lifecycle, pagingData)
+            adapter.notifyItemRangeChanged(0, adapter.itemCount)
         }
     }
 
@@ -68,6 +73,7 @@ class AllNewsFragment :
     private fun showProgress() {
         adapter.addLoadStateListener { state ->
             parentActivity.setProgress(state.refresh is LoadState.Loading)
+            binding.allNewsRv.smoothScrollToPosition(0)
         }
     }
 }

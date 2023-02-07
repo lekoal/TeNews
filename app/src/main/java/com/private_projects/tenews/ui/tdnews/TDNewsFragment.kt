@@ -38,13 +38,17 @@ class TDNewsFragment :
         parentActivity = requireActivity() as MainActivity
 
         initRV()
-        getNews()
         itemClickListener()
         showProgress()
         val connectionState = ConnectionStatus()
         if (!connectionState.check(requireContext())) {
             connectionErrorScreen.visibility = View.VISIBLE
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getNews()
     }
 
     private fun initRV() {
@@ -68,6 +72,7 @@ class TDNewsFragment :
     private fun showProgress() {
         adapter.addLoadStateListener { state ->
             parentActivity.setProgress(state.refresh is LoadState.Loading)
+            binding.tdnewsRv.smoothScrollToPosition(0)
         }
     }
 }

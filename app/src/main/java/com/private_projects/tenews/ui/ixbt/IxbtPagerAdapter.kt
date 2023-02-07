@@ -54,12 +54,22 @@ class IxbtPagerAdapter :
         holder.dateTime.text = date
         holder.description.text = newsText
         holder.author.text = VkHelpData.IXBT_DOMAIN
-        Glide.with(holder.view)
-            .load(imageUrl)
-            .override(200, 100)
-            .centerCrop()
-            .placeholder(R.drawable.placeholder)
-            .into(holder.image)
+
+        if (imageUrl != "") {
+            Glide.with(holder.view)
+                .load(imageUrl)
+                .override(200, 100)
+                .centerCrop()
+                .placeholder(R.drawable.placeholder)
+                .into(holder.image)
+        } else {
+            Glide.with(holder.view)
+                .load(R.drawable.no_photo)
+                .override(200, 100)
+                .centerCrop()
+                .placeholder(R.drawable.placeholder)
+                .into(holder.image)
+        }
 
         holder.itemView.setOnClickListener {
             onItemClick?.invoke(

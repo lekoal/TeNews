@@ -10,7 +10,7 @@ import com.private_projects.tenews.ui.tdnews.TDNewsFragment
 
 class MainViewPagerAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
-    private val fragments = arrayOf(
+    val fragments = arrayOf(
         AllNewsFragment(), IxbtNewsFragment(), FerraNewsFragment(), TDNewsFragment()
     )
 

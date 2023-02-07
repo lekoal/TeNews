@@ -28,6 +28,9 @@ class MainActivity : AppCompatActivity() {
     private val connectionErrorScreen: ConstraintLayout by lazy {
         findViewById(R.id.connection_error_block)
     }
+    private val viewPagerAdapter: MainViewPagerAdapter by lazy {
+        MainViewPagerAdapter(this)
+    }
 
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,10 +38,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        binding.viewPager.adapter = MainViewPagerAdapter(this)
+        binding.viewPager.adapter = viewPagerAdapter
 
         attachTabs()
         checkProgress()
+        waitOnRefresh()
     }
 
     companion object {
@@ -81,6 +85,30 @@ class MainActivity : AppCompatActivity() {
                 .addToBackStack(null)
                 .commit()
         }
+    }
+
+    private fun waitOnRefresh() {
+        binding.refreshFab.setOnClickListener {
+            when (binding.tabLayout.selectedTabPosition) {
+                ALL_NEWS_FRAGMENT -> {
+                    fragmentRefresh(ALL_NEWS_FRAGMENT)
+                }
+                IXBT_NEWS_FRAGMENT -> {
+                    fragmentRefresh(IXBT_NEWS_FRAGMENT)
+                }
+                FERRA_NEWS_FRAGMENT -> {
+                    fragmentRefresh(FERRA_NEWS_FRAGMENT)
+                }
+                TD_NEWS_FRAGMENT -> {
+                    fragmentRefresh(TD_NEWS_FRAGMENT)
+                }
+            }
+        }
+    }
+
+    private fun fragmentRefresh(fragment: Int) {
+        viewPagerAdapter.fragments[fragment].onPause()
+        viewPagerAdapter.fragments[fragment].onResume()
     }
 
     fun blockDetails(isBlock: Boolean) {

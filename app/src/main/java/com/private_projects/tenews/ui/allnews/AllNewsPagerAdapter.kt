@@ -41,12 +41,21 @@ class AllNewsPagerAdapter :
         holder.dateTime.text = date
         holder.description.text = newsItem?.description
         holder.author.text = newsItem?.ownerDomain
-        Glide.with(holder.view)
-            .load(newsItem?.imageUrl)
-            .override(200, 100)
-            .centerCrop()
-            .placeholder(R.drawable.placeholder)
-            .into(holder.image)
+        if (newsItem?.imageUrl != "") {
+            Glide.with(holder.view)
+                .load(newsItem?.imageUrl)
+                .override(200, 100)
+                .centerCrop()
+                .placeholder(R.drawable.placeholder)
+                .into(holder.image)
+        } else {
+            Glide.with(holder.view)
+                .load(R.drawable.no_photo)
+                .override(200, 100)
+                .centerCrop()
+                .placeholder(R.drawable.placeholder)
+                .into(holder.image)
+        }
 
         holder.itemView.setOnClickListener {
             onItemClick?.invoke(

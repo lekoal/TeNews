@@ -13,4 +13,5 @@
     <string name="connection_retry_text">Повторить попытку</string>
     <string name="connection_retry_button_description">Обновить страницу</string>
     <string name="tab_layout_description">Основные вкладки</string>
+    <string name="refresh_button">Обновить новости</string>
 </resources>
