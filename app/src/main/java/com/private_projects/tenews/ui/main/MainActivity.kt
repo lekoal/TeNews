@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.private_projects.tenews.R
@@ -30,6 +31,9 @@ class MainActivity : AppCompatActivity() {
     }
     private val viewPagerAdapter: MainViewPagerAdapter by lazy {
         MainViewPagerAdapter(this)
+    }
+    private val connectionRetry: AppCompatImageButton by lazy {
+        findViewById(R.id.connection_retry)
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -79,8 +83,14 @@ class MainActivity : AppCompatActivity() {
         val connectionState = ConnectionStatus()
         if (!connectionState.check(this)) {
             connectionErrorScreen.visibility = View.VISIBLE
+            connectionRetry.setOnClickListener {
+                onRefresh()
+                showDetails(params)
+            }
         } else {
+            connectionErrorScreen.visibility = View.GONE
             supportFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.details_show, R.anim.details_hide)
                 .replace(binding.detailsContainer.id, DetailsFragment.newInstance(params))
                 .addToBackStack(null)
                 .commit()
@@ -89,19 +99,23 @@ class MainActivity : AppCompatActivity() {
 
     private fun waitOnRefresh() {
         binding.refreshFab.setOnClickListener {
-            when (binding.tabLayout.selectedTabPosition) {
-                ALL_NEWS_FRAGMENT -> {
-                    fragmentRefresh(ALL_NEWS_FRAGMENT)
-                }
-                IXBT_NEWS_FRAGMENT -> {
-                    fragmentRefresh(IXBT_NEWS_FRAGMENT)
-                }
-                FERRA_NEWS_FRAGMENT -> {
-                    fragmentRefresh(FERRA_NEWS_FRAGMENT)
-                }
-                TD_NEWS_FRAGMENT -> {
-                    fragmentRefresh(TD_NEWS_FRAGMENT)
-                }
+            onRefresh()
+        }
+    }
+
+    fun onRefresh() {
+        when (binding.tabLayout.selectedTabPosition) {
+            ALL_NEWS_FRAGMENT -> {
+                fragmentRefresh(ALL_NEWS_FRAGMENT)
+            }
+            IXBT_NEWS_FRAGMENT -> {
+                fragmentRefresh(IXBT_NEWS_FRAGMENT)
+            }
+            FERRA_NEWS_FRAGMENT -> {
+                fragmentRefresh(FERRA_NEWS_FRAGMENT)
+            }
+            TD_NEWS_FRAGMENT -> {
+                fragmentRefresh(TD_NEWS_FRAGMENT)
             }
         }
     }

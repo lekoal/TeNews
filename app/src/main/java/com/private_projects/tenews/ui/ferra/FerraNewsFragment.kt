@@ -2,6 +2,7 @@ package com.private_projects.tenews.ui.ferra
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +28,12 @@ class FerraNewsFragment :
     private val connectionErrorScreen: ConstraintLayout by lazy {
         requireActivity().findViewById(R.id.connection_error_block)
     }
+    private val connectionRetry: AppCompatImageButton by lazy {
+        requireActivity().findViewById(R.id.connection_retry)
+    }
+    private val connectionState: ConnectionStatus by lazy {
+        ConnectionStatus()
+    }
     private lateinit var parentActivity: MainActivity
 
     companion object {
@@ -40,14 +47,23 @@ class FerraNewsFragment :
         initRV()
         itemClickListener()
         showProgress()
-        val connectionState = ConnectionStatus()
+    }
+
+    private fun checkConnection() {
         if (!connectionState.check(requireContext())) {
             connectionErrorScreen.visibility = View.VISIBLE
+            connectionRetry.setOnClickListener {
+                checkConnection()
+            }
+        } else {
+            connectionErrorScreen.visibility = View.GONE
+            parentActivity.onRefresh()
         }
     }
 
     override fun onResume() {
         super.onResume()
+        checkConnection()
         getNews()
     }
 
