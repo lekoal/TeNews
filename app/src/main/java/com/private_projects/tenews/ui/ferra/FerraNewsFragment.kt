@@ -34,7 +34,9 @@ class FerraNewsFragment :
     private val connectionState: ConnectionStatus by lazy {
         ConnectionStatus()
     }
-    private lateinit var parentActivity: MainActivity
+    private val parentActivity: MainActivity by lazy {
+        requireActivity() as MainActivity
+    }
 
     companion object {
         private const val SCOPE_ID = "ferra_news_scope_id"
@@ -42,7 +44,6 @@ class FerraNewsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        parentActivity = requireActivity() as MainActivity
 
         initRV()
         itemClickListener()
@@ -54,10 +55,10 @@ class FerraNewsFragment :
             connectionErrorScreen.visibility = View.VISIBLE
             connectionRetry.setOnClickListener {
                 checkConnection()
+                parentActivity.onRefresh()
             }
         } else {
             connectionErrorScreen.visibility = View.GONE
-            parentActivity.onRefresh()
         }
     }
 

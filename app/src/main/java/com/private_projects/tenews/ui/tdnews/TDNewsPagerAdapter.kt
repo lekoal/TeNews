@@ -2,10 +2,11 @@ package com.private_projects.tenews.ui.tdnews
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.private_projects.tenews.R
 import com.private_projects.tenews.data.VkHelpData
 import com.private_projects.tenews.data.tdnews.VkTdnewsDTO
@@ -52,19 +53,25 @@ class TDNewsPagerAdapter :
         holder.description.text = newsText
 
         if (imageUrl != "") {
-            Glide.with(holder.view)
-                .load(imageUrl)
-                .override(200, 100)
-                .centerCrop()
-                .placeholder(R.drawable.placeholder)
-                .into(holder.image)
+            holder.image.apply {
+                scaleType = ImageView.ScaleType.CENTER_CROP
+                load(imageUrl) {
+                    placeholder(R.drawable.placeholder)
+                    size(200, 100)
+                    crossfade(true)
+                    crossfade(500)
+                }
+            }
         } else {
-            Glide.with(holder.view)
-                .load(R.drawable.no_photo)
-                .override(200, 100)
-                .centerCrop()
-                .placeholder(R.drawable.placeholder)
-                .into(holder.image)
+            holder.image.apply {
+                scaleType = ImageView.ScaleType.CENTER_CROP
+                load(R.drawable.no_photo) {
+                    placeholder(R.drawable.placeholder)
+                    size(200, 100)
+                    crossfade(true)
+                    crossfade(500)
+                }
+            }
         }
 
         holder.itemView.setOnClickListener {

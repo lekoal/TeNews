@@ -2,7 +2,6 @@ package com.private_projects.tenews.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import com.private_projects.tenews.databinding.ActivityStartScreenBinding
@@ -34,12 +33,10 @@ class StartScreenActivity : AppCompatActivity() {
             }
 
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-                Handler(mainLooper).post {
-                    startActivity(
-                        Intent(this@StartScreenActivity, MainActivity::class.java)
-                    )
-                    finish()
-                }
+                startActivity(
+                    Intent(this@StartScreenActivity, MainActivity::class.java)
+                )
+                finish()
             }
 
             override fun onTransitionTrigger(

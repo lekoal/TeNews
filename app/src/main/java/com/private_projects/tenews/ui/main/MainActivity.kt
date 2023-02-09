@@ -29,17 +29,18 @@ class MainActivity : AppCompatActivity() {
     private val connectionErrorScreen: ConstraintLayout by lazy {
         findViewById(R.id.connection_error_block)
     }
-    private val viewPagerAdapter: MainViewPagerAdapter by lazy {
-        MainViewPagerAdapter(this)
-    }
     private val connectionRetry: AppCompatImageButton by lazy {
         findViewById(R.id.connection_retry)
     }
+    private val binding: ActivityMainBinding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
+    private val viewPagerAdapter: MainViewPagerAdapter by lazy {
+        MainViewPagerAdapter(this)
+    }
 
-    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         binding.viewPager.adapter = viewPagerAdapter

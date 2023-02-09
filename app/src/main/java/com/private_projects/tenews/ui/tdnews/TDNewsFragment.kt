@@ -34,7 +34,9 @@ class TDNewsFragment :
     private val connectionState: ConnectionStatus by lazy {
         ConnectionStatus()
     }
-    private lateinit var parentActivity: MainActivity
+    private val parentActivity: MainActivity by lazy {
+        requireActivity() as MainActivity
+    }
 
     companion object {
         private const val SCOPE_ID = "tdnews_scope_id"
@@ -42,7 +44,6 @@ class TDNewsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        parentActivity = requireActivity() as MainActivity
 
         initRV()
         itemClickListener()
@@ -54,10 +55,10 @@ class TDNewsFragment :
             connectionErrorScreen.visibility = View.VISIBLE
             connectionRetry.setOnClickListener {
                 checkConnection()
+                parentActivity.onRefresh()
             }
         } else {
             connectionErrorScreen.visibility = View.GONE
-            parentActivity.onRefresh()
         }
     }
 

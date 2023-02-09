@@ -2,10 +2,11 @@ package com.private_projects.tenews.ui.allnews
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.private_projects.tenews.R
 import com.private_projects.tenews.data.allnews.VkAllNewsDTO
 import com.private_projects.tenews.databinding.NewsRvItemBinding
@@ -42,19 +43,25 @@ class AllNewsPagerAdapter :
         holder.description.text = newsItem?.description
         holder.author.text = newsItem?.ownerDomain
         if (newsItem?.imageUrl != "") {
-            Glide.with(holder.view)
-                .load(newsItem?.imageUrl)
-                .override(200, 100)
-                .centerCrop()
-                .placeholder(R.drawable.placeholder)
-                .into(holder.image)
+            holder.image.apply {
+                scaleType = ImageView.ScaleType.CENTER_CROP
+                load(newsItem?.imageUrl) {
+                    placeholder(R.drawable.placeholder)
+                    size(200, 100)
+                    crossfade(true)
+                    crossfade(500)
+                }
+            }
         } else {
-            Glide.with(holder.view)
-                .load(R.drawable.no_photo)
-                .override(200, 100)
-                .centerCrop()
-                .placeholder(R.drawable.placeholder)
-                .into(holder.image)
+            holder.image.apply {
+                scaleType = ImageView.ScaleType.CENTER_CROP
+                load(R.drawable.no_photo) {
+                    placeholder(R.drawable.placeholder)
+                    size(200, 100)
+                    crossfade(true)
+                    crossfade(500)
+                }
+            }
         }
 
         holder.itemView.setOnClickListener {

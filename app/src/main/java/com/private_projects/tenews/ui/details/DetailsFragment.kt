@@ -3,10 +3,12 @@ package com.private_projects.tenews.ui.details
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
-import com.bumptech.glide.Glide
+import coil.load
+import coil.size.Scale
 import com.private_projects.tenews.R
 import com.private_projects.tenews.data.details.NewsDetailsEntity
 import com.private_projects.tenews.databinding.FragmentDetailsBinding
@@ -100,11 +102,14 @@ class DetailsFragment :
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT
                         )
-                        Glide.with(imageView)
-                            .load(it.url)
-                            .override(1400, 800)
-                            .fitCenter()
-                            .into(imageView)
+                        imageView.apply {
+                            scaleType = ImageView.ScaleType.FIT_XY
+                            load(it.url) {
+                                placeholder(R.drawable.placeholder).scale(Scale.FILL)
+                                crossfade(true)
+                                crossfade(500)
+                            }
+                        }
                         layout.addView(imageView)
                     }
                 }
@@ -122,7 +127,7 @@ class DetailsFragment :
                         } else {
                             textView.text = it.content
                         }
-                            layout.addView(textView)
+                        layout.addView(textView)
                     }
                 }
             }
