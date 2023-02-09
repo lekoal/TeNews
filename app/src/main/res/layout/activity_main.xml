@@ -11,6 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="?actionBarSize"
         android:background="@color/brown_dark_900"
+        android:contentDescription="@string/tab_layout_description"
         android:paddingVertical="5dp"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,14 +37,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tab_layout" />
 
+    <include
+        android:id="@+id/connection_error_block"
+        layout="@layout/connection_error_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
     <FrameLayout
-        android:id="@+id/details_container"
+        android:id="@+id/details_block_screen"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:alpha="0.6"
+        android:background="@color/brown_100"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/details_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:elevation="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tab_layout" />
 
     <FrameLayout
         android:id="@+id/block_screen"
@@ -51,6 +73,7 @@
         android:layout_height="0dp"
         android:alpha="0.6"
         android:background="@color/brown_100"
+        android:elevation="200dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,5 +91,21 @@
             app:trackThickness="5dp" />
 
     </FrameLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/refresh_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="@color/brown_200"
+        android:contentDescription="@string/refresh_button"
+        android:src="@drawable/baseline_wifi_protected_setup_24"
+        app:backgroundTint="@color/brown_900"
+        app:borderWidth="5dp"
+        app:fabCustomSize="70dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="60dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

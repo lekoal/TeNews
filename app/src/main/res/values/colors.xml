@@ -17,4 +17,8 @@
     <color name="brown_900">#3e2723</color>
     <color name="brown_dark_900">#1b0000</color>
 
+    <color name="transparent">#00000000</color>
+
+    <color name="black_alpha">#65000000</color>
+
 </resources>
