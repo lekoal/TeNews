@@ -1,21 +1,22 @@
 package com.private_projects.tenews.ui.allnews
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.private_projects.tenews.R
 import com.private_projects.tenews.databinding.FragmentAllNewsBinding
 import com.private_projects.tenews.ui.main.MainActivity
 import com.private_projects.tenews.utils.ConnectionStatus
-import com.private_projects.tenews.utils.ViewBindingFragment
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 
-class AllNewsFragment :
-    ViewBindingFragment<FragmentAllNewsBinding>(FragmentAllNewsBinding::inflate) {
+class AllNewsFragment : Fragment() {
     private val scope by lazy {
         getKoin().getOrCreateScope<AllNewsFragment>(SCOPE_ID)
     }
@@ -38,6 +39,19 @@ class AllNewsFragment :
         requireActivity() as MainActivity
     }
 
+    private var _binding: FragmentAllNewsBinding? = null
+    private val binding: FragmentAllNewsBinding by lazy {
+        _binding!!
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentAllNewsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -92,5 +106,10 @@ class AllNewsFragment :
             parentActivity.setProgress(state.refresh is LoadState.Loading)
             binding.allNewsRv.smoothScrollToPosition(0)
         }
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 }

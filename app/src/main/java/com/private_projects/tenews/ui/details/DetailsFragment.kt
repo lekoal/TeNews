@@ -1,35 +1,49 @@
 package com.private_projects.tenews.ui.details
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.fragment.app.Fragment
 import coil.load
 import coil.size.Scale
 import com.private_projects.tenews.R
 import com.private_projects.tenews.data.details.NewsDetailsEntity
 import com.private_projects.tenews.databinding.FragmentDetailsBinding
 import com.private_projects.tenews.ui.main.MainActivity
-import com.private_projects.tenews.utils.ViewBindingFragment
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 
-class DetailsFragment :
-    ViewBindingFragment<FragmentDetailsBinding>(FragmentDetailsBinding::inflate) {
-    private lateinit var parentActivity: MainActivity
+class DetailsFragment : Fragment() {
+    private val parentActivity: MainActivity by lazy {
+        requireActivity() as MainActivity
+    }
     private val scope by lazy {
         getKoin().getOrCreateScope<DetailsFragment>(SCOPE_ID)
     }
     private val viewModel: DetailsViewModel by lazy {
         scope.get(named("details_view_model"))
     }
+    private var _binding: FragmentDetailsBinding? = null
+    private val binding: FragmentDetailsBinding by lazy {
+        _binding!!
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        parentActivity = requireActivity() as MainActivity
 
         getElements()
         loadCheck()
@@ -132,5 +146,10 @@ class DetailsFragment :
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 }

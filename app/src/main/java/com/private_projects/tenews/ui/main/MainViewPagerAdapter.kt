@@ -10,9 +10,11 @@ import com.private_projects.tenews.ui.tdnews.TDNewsFragment
 
 class MainViewPagerAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
-    val fragments = arrayOf(
-        AllNewsFragment(), IxbtNewsFragment(), FerraNewsFragment(), TDNewsFragment()
-    )
+    val fragments: Array<Fragment> by lazy {
+        arrayOf(
+            AllNewsFragment(), IxbtNewsFragment(), FerraNewsFragment(), TDNewsFragment()
+        )
+    }
 
     override fun getItemCount() = fragments.size
 

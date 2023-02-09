@@ -9,12 +9,12 @@ import com.private_projects.tenews.databinding.ActivityStartScreenBinding
 import com.private_projects.tenews.ui.main.MainActivity
 
 class StartScreenActivity : AppCompatActivity() {
-    private val binding: ActivityStartScreenBinding by lazy {
-        ActivityStartScreenBinding.inflate(layoutInflater)
-    }
+    private var _binding: ActivityStartScreenBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _binding = ActivityStartScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.splashLayout.setTransitionListener(object : MotionLayout.TransitionListener {
@@ -34,12 +34,14 @@ class StartScreenActivity : AppCompatActivity() {
             }
 
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-                Handler(mainLooper).post {
-                    startActivity(
-                        Intent(this@StartScreenActivity, MainActivity::class.java)
-                    )
-                    finish()
-                }
+                Handler(mainLooper).postDelayed(
+                    {
+                        startActivity(
+                            Intent(this@StartScreenActivity, MainActivity::class.java)
+                        )
+                        finish()
+                    }, 1000L
+                )
             }
 
             override fun onTransitionTrigger(
@@ -51,5 +53,10 @@ class StartScreenActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 }

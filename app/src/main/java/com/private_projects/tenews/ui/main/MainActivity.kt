@@ -32,15 +32,16 @@ class MainActivity : AppCompatActivity() {
     private val connectionRetry: AppCompatImageButton by lazy {
         findViewById(R.id.connection_retry)
     }
-    private val binding: ActivityMainBinding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
-    }
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
+
     private val viewPagerAdapter: MainViewPagerAdapter by lazy {
         MainViewPagerAdapter(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         binding.viewPager.adapter = viewPagerAdapter
@@ -137,5 +138,10 @@ class MainActivity : AppCompatActivity() {
             binding.detailsBlockScreen.visibility = View.GONE
             binding.detailsBlockScreen.isClickable = false
         }
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 }
