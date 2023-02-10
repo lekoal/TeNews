@@ -20,7 +20,7 @@ class FerraElementsReceiverImpl : ElementsReceiver {
             connection.method(Connection.Method.GET)
             response = connection.execute()
             val document = connection.url(newsUrl).get()
-            emit(document.select("div._2H76iO6B"))
+            emit(document.select("article > div > div > div > div > div > div > div > div > *"))
         } catch (e: IOException) {
             e.printStackTrace()
         }

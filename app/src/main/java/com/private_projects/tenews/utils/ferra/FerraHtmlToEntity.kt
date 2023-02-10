@@ -7,51 +7,68 @@ import kotlinx.coroutines.flow.flow
 import org.jsoup.select.Elements
 
 class FerraHtmlToEntity {
-    fun convert(elements: Elements, newsId: Int, newsDate: String): Flow<NewsDetailsEntity> = flow {
-        elements.forEach { element ->
-            val texts = mutableListOf<TextBlockEntity>()
-            val images = mutableListOf<ImageBlockEntity>()
-            val videos = mutableListOf<VideoBlockEntity>()
-            val header = HeaderBlockEntity(
-                newsId = newsId,
-                ownerDomain = VkHelpData.FERRA_DOMAIN,
-                firstTitle = element.selectFirst("h1")?.text().toString(),
-                secondTitle = element.selectFirst("span.subtitle")?.text().toString(),
-                newsDate = newsDate
-            )
+    private var tempFirstTitle = ""
+    private var tempSecondTitle = ""
 
-            element.select("div._2H76iO6B > *").forEachIndexed { index, elem ->
-                elem.select("div._315ylfAj").let {
-                    if (it.select("link").attr("href") != "") {
-                        images.add(
-                            ImageBlockEntity(
-                                ownerId = newsId,
-                                position = index,
-                                url = "https://www.ferra.ru" + it.select("link").attr("href")
-                            )
+    fun convert(elements: Elements, newsId: Int, newsDate: String): Flow<NewsDetailsEntity> = flow {
+        val texts = mutableListOf<TextBlockEntity>()
+        val images = mutableListOf<ImageBlockEntity>()
+        val videos = mutableListOf<VideoBlockEntity>()
+        elements.forEachIndexed { index, element ->
+
+            if (element.selectFirst("h1")?.text() != null) {
+                tempFirstTitle = element.selectFirst("h1")?.text().toString()
+            }
+            if (element.selectFirst("span.subtitle")?.text() != null) {
+                tempSecondTitle = element.selectFirst("span.subtitle")?.text().toString()
+            }
+
+            if (!element.select("link").isNullOrEmpty()) {
+                if (element.select("link").attr("itemprop") == "url") {
+                    images.add(
+                        ImageBlockEntity(
+                            ownerId = newsId,
+                            position = index,
+                            url = "https://www.ferra.ru" +
+                                    element.select("link").attr("href").toString()
                         )
-                    }
-                }
-                elem.select("p").forEach {
-                    if (it.text().toString() != "") {
-                        texts.add(
-                            TextBlockEntity(
-                                ownerId = newsId,
-                                position = index,
-                                content = it.text().toString()
-                            )
-                        )
-                    }
+                    )
                 }
             }
-            emit(
-                NewsDetailsEntity(
-                    header,
-                    texts,
-                    images,
-                    videos
+
+            element.select("p").forEach {
+                if (it.text().toString() != "") {
+                    texts.add(
+                        TextBlockEntity(
+                            ownerId = newsId,
+                            position = index,
+                            content = it.text().toString()
+                        )
+                    )
+                }
+            }
+            if (tempFirstTitle != "" && tempSecondTitle != "") {
+                val header = HeaderBlockEntity(
+                    newsId = newsId,
+                    ownerDomain = VkHelpData.FERRA_DOMAIN,
+                    firstTitle = tempFirstTitle,
+                    secondTitle = tempSecondTitle,
+                    newsDate = newsDate
                 )
-            )
+
+                println("$header\n\n")
+                println("$texts\n\n")
+                println("$images\n\n")
+
+                emit(
+                    NewsDetailsEntity(
+                        header,
+                        texts,
+                        images,
+                        videos
+                    )
+                )
+            }
         }
     }
 }
