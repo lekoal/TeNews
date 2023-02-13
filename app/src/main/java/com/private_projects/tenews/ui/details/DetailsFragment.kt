@@ -122,7 +122,8 @@ class DetailsFragment : Fragment() {
     }
 
     private fun showErrorMessage(domain: String?) {
-        Toast.makeText(requireContext(), domain.toString(), Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), resources.getString(R.string.details_load_error) +
+                " ${domain.toString()}", Toast.LENGTH_SHORT).show()
     }
 
     private fun setViews(entity: NewsDetailsEntity) {
