@@ -116,6 +116,7 @@ class DetailsFragment : Fragment() {
             viewModel.getStatus(domain).collect {
                 if (it) {
                     showErrorMessage(this@DetailsFragment.arguments?.getString(NEWS_DOMAIN))
+                    requireActivity().supportFragmentManager.popBackStack()
                 }
             }
         }
