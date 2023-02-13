@@ -6,15 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.size.Scale
 import com.private_projects.tenews.R
 import com.private_projects.tenews.data.details.NewsDetailsEntity
 import com.private_projects.tenews.databinding.FragmentDetailsBinding
+import com.private_projects.tenews.ui.main.FERRA_NEWS_FRAGMENT
+import com.private_projects.tenews.ui.main.IXBT_NEWS_FRAGMENT
 import com.private_projects.tenews.ui.main.MainActivity
+import com.private_projects.tenews.ui.main.TD_NEWS_FRAGMENT
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 
@@ -47,6 +53,7 @@ class DetailsFragment : Fragment() {
 
         getElements()
         loadCheck()
+        checkStatus()
     }
 
     override fun onResume() {
@@ -96,26 +103,46 @@ class DetailsFragment : Fragment() {
         }
     }
 
+    private fun checkStatus() {
+        when (this.arguments?.getString(NEWS_DOMAIN)) {
+            resources.getString(R.string.ixbt_news) -> status(IXBT_NEWS_FRAGMENT)
+            resources.getString(R.string.ferra_news) -> status(FERRA_NEWS_FRAGMENT)
+            resources.getString(R.string.td_news) -> status(TD_NEWS_FRAGMENT)
+        }
+    }
+
+    private fun status(domain: Int) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.getStatus(domain).collect {
+                if (it) {
+                    showErrorMessage(this@DetailsFragment.arguments?.getString(NEWS_DOMAIN))
+                }
+            }
+        }
+    }
+
+    private fun showErrorMessage(domain: String?) {
+        Toast.makeText(requireContext(), domain.toString(), Toast.LENGTH_SHORT).show()
+    }
+
     private fun setViews(entity: NewsDetailsEntity) {
         binding.detailsFirstTitle.text = entity.header.firstTitle
         binding.detailsSecondTitle.text = entity.header.secondTitle
         binding.detailAuthor.text = entity.header.ownerDomain
         binding.detailsDate.text = entity.header.newsDate
 
-        val textSize = entity.textBlocks?.size ?: 0
-        val imageSize = entity.imageBlocks?.size ?: 0
-        val videoSize = entity.videoBlocks?.size ?: 0
-        val totalSize = textSize + imageSize + videoSize
         binding.detailsContent.let { layout ->
             layout.removeAllViews()
-            for (i in 0 until totalSize) {
+            for (i in 0 .. receiveMaxPosition(entity)) {
                 entity.imageBlocks?.forEach {
                     if (it.position == i) {
                         val imageView = AppCompatImageView(requireContext())
-                        imageView.layoutParams = LinearLayout.LayoutParams(
+                        val params = LinearLayout.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT
                         )
+                        params.setMargins(0, 20, 0, 0)
+                        imageView.layoutParams = params
                         imageView.apply {
                             scaleType = ImageView.ScaleType.FIT_XY
                             load(it.url) {
@@ -146,6 +173,24 @@ class DetailsFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun receiveMaxPosition(entity: NewsDetailsEntity): Int {
+        var textMaxPosition = 0
+        var imageMaxPosition = 0
+        var videoMaxPosition = 0
+        if (!entity.textBlocks.isNullOrEmpty()) {
+            textMaxPosition = entity.textBlocks.last().position
+        }
+        if (!entity.imageBlocks.isNullOrEmpty()) {
+            imageMaxPosition = entity.imageBlocks.last().position
+        }
+        if (!entity.videoBlocks.isNullOrEmpty()) {
+            videoMaxPosition = entity.videoBlocks.last().position
+        }
+        return if (textMaxPosition > imageMaxPosition) textMaxPosition
+        else if (videoMaxPosition > textMaxPosition) videoMaxPosition
+        else imageMaxPosition
     }
 
     override fun onDestroy() {

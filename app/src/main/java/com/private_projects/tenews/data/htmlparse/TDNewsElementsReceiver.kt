@@ -1,8 +1,7 @@
 package com.private_projects.tenews.data.htmlparse
 
 import com.private_projects.tenews.domain.htmlparse.ElementsReceiver
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import org.jsoup.Connection
 import org.jsoup.Connection.Response
 import org.jsoup.Jsoup
@@ -11,6 +10,8 @@ import java.io.IOException
 
 class TDNewsElementsReceiver : ElementsReceiver {
     private var response: Response? = null
+    private val _responseFlow = MutableStateFlow(false)
+    private val responseFlow = _responseFlow.asStateFlow()
 
     override fun get(newsUrl: String): Flow<Elements> = flow {
         try {
@@ -21,13 +22,19 @@ class TDNewsElementsReceiver : ElementsReceiver {
             response = connection.execute()
             val document = connection.url(newsUrl).get()
             emit(document.select("div.article-entry"))
+            _responseFlow.update {
+                false
+            }
         } catch (e: IOException) {
+            _responseFlow.update {
+                true
+            }
             e.printStackTrace()
         }
     }
 
-    override fun response(): Response? {
-        return response
+    override fun getStatus(): StateFlow<Boolean> {
+        return responseFlow
     }
 
 }

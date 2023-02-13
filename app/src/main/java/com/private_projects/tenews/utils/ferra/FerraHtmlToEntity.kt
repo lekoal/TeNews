@@ -23,52 +23,60 @@ class FerraHtmlToEntity {
                 tempSecondTitle = element.selectFirst("span.subtitle")?.text().toString()
             }
 
-            if (!element.select("link").isNullOrEmpty()) {
-                if (element.select("link").attr("itemprop") == "url") {
-                    images.add(
-                        ImageBlockEntity(
+            element.select("link").forEach { link ->
+                if (!element.select("link").isNullOrEmpty()) {
+                    if (link.attr("itemprop") == "url") {
+                        images.add(
+                            ImageBlockEntity(
+                                ownerId = newsId,
+                                position = index,
+                                url = "https://www.ferra.ru" +
+                                        element.select("link").attr("href").toString()
+                            )
+                        )
+                    }
+                }
+            }
+
+            element.select("p").forEach { p ->
+                if (!p.text().isNullOrEmpty()) {
+                    texts.add(
+                        TextBlockEntity(
                             ownerId = newsId,
                             position = index,
-                            url = "https://www.ferra.ru" +
-                                    element.select("link").attr("href").toString()
+                            content = p.text().toString()
                         )
                     )
                 }
             }
 
-            element.select("p").forEach {
-                if (it.text().toString() != "") {
-                    texts.add(
-                        TextBlockEntity(
-                            ownerId = newsId,
-                            position = index,
-                            content = it.text().toString()
-                        )
-                    )
+            element.select("ul").forEach {ul ->
+                ul.select("li").forEach {li ->
+                    if (!li.text().isNullOrEmpty()) {
+                       texts.add(
+                           TextBlockEntity(
+                               ownerId = newsId,
+                               position = index,
+                               content = li.text().toString()
+                           )
+                       )
+                    }
                 }
             }
-            if (tempFirstTitle != "" && tempSecondTitle != "") {
-                val header = HeaderBlockEntity(
+        }
+        emit(
+            NewsDetailsEntity(
+                HeaderBlockEntity(
                     newsId = newsId,
                     ownerDomain = VkHelpData.FERRA_DOMAIN,
                     firstTitle = tempFirstTitle,
                     secondTitle = tempSecondTitle,
                     newsDate = newsDate
-                )
-
-                println("$header\n\n")
-                println("$texts\n\n")
-                println("$images\n\n")
-
-                emit(
-                    NewsDetailsEntity(
-                        header,
-                        texts,
-                        images,
-                        videos
-                    )
-                )
-            }
-        }
+                ),
+                texts,
+                images,
+                videos
+            )
+        )
     }
 }
