@@ -129,7 +129,13 @@ class DetailsFragment : Fragment() {
 
     private fun setViews(entity: NewsDetailsEntity) {
         binding.detailsFirstTitle.text = entity.header.firstTitle
-        binding.detailsSecondTitle.text = entity.header.secondTitle
+        if (entity.header.secondTitle != null) {
+            binding.detailsSecondTitle.visibility = View.VISIBLE
+            binding.detailsSecondTitle.text = entity.header.secondTitle
+        } else {
+            binding.detailsSecondTitle.visibility = View.GONE
+        }
+
         binding.detailAuthor.text = entity.header.ownerDomain
         binding.detailsDate.text = entity.header.newsDate
 
@@ -159,15 +165,16 @@ class DetailsFragment : Fragment() {
                 entity.textBlocks?.forEach {
                     if (it.position == i) {
                         val textView = AppCompatTextView(requireContext())
-                        textView.textSize = 16F
                         if (
                             it.content.contains("Фото:") ||
                             it.content.contains("Источник изображений:") ||
                             it.content.contains("Источник изображения:")
                         ) {
+                            textView.textSize = 16F
                             textView.text =
                                 requireActivity().getString(R.string.photo_source_text, it.content)
                         } else {
+                            textView.textSize = 18F
                             textView.text = it.content
                         }
                         layout.addView(textView)

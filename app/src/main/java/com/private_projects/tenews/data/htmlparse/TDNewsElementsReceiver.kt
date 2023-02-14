@@ -21,7 +21,7 @@ class TDNewsElementsReceiver : ElementsReceiver {
             connection.method(Connection.Method.GET)
             response = connection.execute()
             val document = connection.url(newsUrl).get()
-            emit(document.select("div.article-entry"))
+            emit(document.select("div.article-entry > *"))
             _responseFlow.update {
                 false
             }
