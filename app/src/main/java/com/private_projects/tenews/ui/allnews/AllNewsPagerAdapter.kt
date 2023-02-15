@@ -38,41 +38,47 @@ class AllNewsPagerAdapter :
         val converter = TimestampConverter()
         val date = newsItem?.date?.let { converter.convert(it.toInt()) }
 
-        holder.title.text = newsItem?.title
-        holder.dateTime.text = date
-        holder.description.text = newsItem?.description
-        holder.author.text = newsItem?.ownerDomain
-        if (newsItem?.imageUrl != "") {
-            holder.image.apply {
-                scaleType = ImageView.ScaleType.CENTER_CROP
-                load(newsItem?.imageUrl) {
-                    placeholder(R.drawable.placeholder)
-                    size(200, 100)
-                    crossfade(true)
-                    crossfade(500)
+        if (
+            newsItem?.newsUrl?.contains("https://www.ixbt.com/news/") == true ||
+            newsItem?.newsUrl?.contains("https://www.ferra.ru/news/") == true ||
+            newsItem?.newsUrl?.contains("https://3dnews.ru/") == true
+        ) {
+            holder.title.text = newsItem.title
+            holder.dateTime.text = date
+            holder.description.text = newsItem.description
+            holder.author.text = newsItem.ownerDomain
+            if (newsItem.imageUrl != "") {
+                holder.image.apply {
+                    scaleType = ImageView.ScaleType.CENTER_CROP
+                    load(newsItem.imageUrl) {
+                        placeholder(R.drawable.placeholder)
+                        size(200, 100)
+                        crossfade(true)
+                        crossfade(500)
+                    }
+                }
+            } else {
+                holder.image.apply {
+                    scaleType = ImageView.ScaleType.CENTER_CROP
+                    load(R.drawable.no_photo) {
+                        placeholder(R.drawable.placeholder)
+                        size(200, 100)
+                        crossfade(true)
+                        crossfade(500)
+                    }
                 }
             }
-        } else {
-            holder.image.apply {
-                scaleType = ImageView.ScaleType.CENTER_CROP
-                load(R.drawable.no_photo) {
-                    placeholder(R.drawable.placeholder)
-                    size(200, 100)
-                    crossfade(true)
-                    crossfade(500)
-                }
-            }
-        }
 
-        holder.itemView.setOnClickListener {
-            onItemClick?.invoke(
-                listOf(
-                    newsItem?.newsUrl.toString(),
-                    newsItem?.id.toString(),
-                    newsItem?.ownerDomain.toString(),
-                    date ?: ""
+            holder.itemView.setOnClickListener {
+                onItemClick?.invoke(
+                    listOf(
+                        newsItem.newsUrl,
+                        newsItem.id.toString(),
+                        newsItem.ownerDomain,
+                        date ?: ""
+                    )
                 )
-            )
+            }
         }
     }
 

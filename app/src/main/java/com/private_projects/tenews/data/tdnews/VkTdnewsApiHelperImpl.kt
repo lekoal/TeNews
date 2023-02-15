@@ -15,7 +15,7 @@ class VkTdnewsApiHelperImpl(private val vkTdnewsApi: VkTdnewsApi) : VkTdnewsApiH
             config = PagingConfig(
                 pageSize = VkHelpData.PAGE_SIZE,
                 enablePlaceholders = true,
-                initialLoadSize = 5
+                initialLoadSize = 7
             ),
             pagingSourceFactory = { VkTdnewsPagingSource(vkTdnewsApi) },
             initialKey = 1

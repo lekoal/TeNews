@@ -19,8 +19,16 @@ class VkIxbtPagingSource(private val vkIxbtApi: VkIxbtApi) :
             val response = vkIxbtApi.getNews(
                 page = position
             )
+            val items = mutableListOf<VkIxbtDTO.Response.Item>()
+            response.body()?.response?.items?.forEach { item ->
+                item.attachments.forEach { attachment ->
+                    if (attachment.type != "video") {
+                        items.add(item)
+                    }
+                }
+            }
             LoadResult.Page(
-                data = response.body()!!.response.items,
+                data = items.distinct(),
                 prevKey = if (position == 1) null
                 else position - 1,
                 nextKey = position + 1

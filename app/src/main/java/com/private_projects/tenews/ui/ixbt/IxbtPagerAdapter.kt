@@ -51,42 +51,47 @@ class IxbtPagerAdapter :
         val converter = TimestampConverter()
         val date = newsItem?.date?.let { converter.convert(it) }
 
-        holder.title.text = title
-        holder.dateTime.text = date
-        holder.description.text = newsText
-        holder.author.text = VkHelpData.IXBT_DOMAIN
+        if (
+            newsItem?.attachments?.get(1)?.link?.url?.contains("https://www.ixbt.com/news/")
+            == true
+        ) {
+            holder.title.text = title
+            holder.dateTime.text = date
+            holder.description.text = newsText
+            holder.author.text = VkHelpData.IXBT_DOMAIN
 
-        if (imageUrl != "") {
-            holder.image.apply {
-                scaleType = ImageView.ScaleType.CENTER_CROP
-                load(imageUrl) {
-                    placeholder(R.drawable.placeholder)
-                    size(200, 100)
-                    crossfade(true)
-                    crossfade(500)
+            if (imageUrl != "") {
+                holder.image.apply {
+                    scaleType = ImageView.ScaleType.CENTER_CROP
+                    load(imageUrl) {
+                        placeholder(R.drawable.placeholder)
+                        size(200, 100)
+                        crossfade(true)
+                        crossfade(500)
+                    }
+                }
+            } else {
+                holder.image.apply {
+                    scaleType = ImageView.ScaleType.CENTER_CROP
+                    load(R.drawable.no_photo) {
+                        placeholder(R.drawable.placeholder)
+                        size(200, 100)
+                        crossfade(true)
+                        crossfade(500)
+                    }
                 }
             }
-        } else {
-            holder.image.apply {
-                scaleType = ImageView.ScaleType.CENTER_CROP
-                load(R.drawable.no_photo) {
-                    placeholder(R.drawable.placeholder)
-                    size(200, 100)
-                    crossfade(true)
-                    crossfade(500)
-                }
-            }
-        }
 
-        holder.itemView.setOnClickListener {
-            onItemClick?.invoke(
-                listOf(
-                    newsUrl,
-                    newsItem?.id.toString(),
-                    VkHelpData.IXBT_DOMAIN,
-                    date ?: ""
+            holder.itemView.setOnClickListener {
+                onItemClick?.invoke(
+                    listOf(
+                        newsUrl,
+                        newsItem.id.toString(),
+                        VkHelpData.IXBT_DOMAIN,
+                        date ?: ""
+                    )
                 )
-            )
+            }
         }
     }
 

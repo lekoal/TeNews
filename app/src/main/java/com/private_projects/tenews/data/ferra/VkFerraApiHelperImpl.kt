@@ -15,7 +15,7 @@ class VkFerraApiHelperImpl(private val vkFerraApi: VkFerraApi) : VkFerraApiHelpe
             config = PagingConfig(
                 pageSize = VkHelpData.PAGE_SIZE,
                 enablePlaceholders = true,
-                initialLoadSize = 5
+                initialLoadSize = 7
             ),
             pagingSourceFactory = { VkFerraPagingSource(vkFerraApi) },
             initialKey = 1

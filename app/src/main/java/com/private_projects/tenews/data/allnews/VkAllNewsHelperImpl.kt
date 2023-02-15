@@ -22,7 +22,7 @@ class VkAllNewsHelperImpl(
             config = PagingConfig(
                 pageSize = VkHelpData.PAGE_SIZE * 3,
                 enablePlaceholders = true,
-                initialLoadSize = 5
+                initialLoadSize = 7
             ),
             pagingSourceFactory = {
                 VkAllNewsPagingSource(
