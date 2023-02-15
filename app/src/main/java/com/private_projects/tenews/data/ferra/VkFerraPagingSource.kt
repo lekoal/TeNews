@@ -16,11 +16,19 @@ class VkFerraPagingSource(private val vkFerraApi: VkFerraApi) :
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, VkFerraDTO.Response.Item> {
         return try {
             val position = params.key ?: 1
-            val response = vkFerraApi.getNews(
-                page = position
-            )
+            val resList = mutableListOf<VkFerraDTO.Response.Item>()
+            vkFerraApi.getNews(page = position).let { resp ->
+                resp.body()?.response?.items?.forEach { item ->
+                    item.attachments.forEach { attachment ->
+                        if (attachment.link.url.contains("https://www.ferra.ru/news/")) {
+                            resList.add(item)
+                        }
+                    }
+                }
+            }
+
             LoadResult.Page(
-                data = response.body()!!.response.items,
+                data = resList,
                 prevKey = if (position == 1) null
                 else position - 1,
                 nextKey = position + 1

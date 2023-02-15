@@ -12,5 +12,6 @@ object VkHelpData {
     const val TDNEWS_DOMAIN = "3dnews.ru"
     const val TDNEWS_ID = "-14317987"
     const val API_V = "5.131"
-    const val PAGE_SIZE = 30
+    const val PAGE_SIZE = 40
+    const val INITIAL_LOAD_SIZE = 8
 }
