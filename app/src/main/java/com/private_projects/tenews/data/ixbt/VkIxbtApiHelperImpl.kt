@@ -15,7 +15,7 @@ class VkIxbtApiHelperImpl(private val vkIxbtApi: VkIxbtApi) : VkIxbtApiHelper {
             config = PagingConfig(
                 pageSize = VkHelpData.PAGE_SIZE,
                 enablePlaceholders = true,
-                initialLoadSize = 7
+                initialLoadSize = VkHelpData.INITIAL_LOAD_SIZE
             ),
             pagingSourceFactory = { VkIxbtPagingSource(vkIxbtApi) },
             initialKey = 1

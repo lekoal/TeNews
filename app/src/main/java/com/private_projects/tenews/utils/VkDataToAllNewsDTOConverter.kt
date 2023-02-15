@@ -13,8 +13,20 @@ class VkDataToAllNewsDTOConverter(
 ) {
     suspend fun convert(page: Int): List<VkAllNewsDTO> {
         val resultList = mutableListOf<VkAllNewsDTO>()
-        resultList.addAll(ixbtConverter(vkIxbtApi, page))
-        resultList.addAll(ferraConverter(vkFerraApi, page))
+        ixbtConverter(vkIxbtApi, page).let { list ->
+            list.forEach { dto ->
+                if (dto.newsUrl.contains("https://www.ixbt.com/news/")) {
+                    resultList.add(dto)
+                }
+            }
+        }
+        ferraConverter(vkFerraApi, page).let { list ->
+            list.forEach { dto ->
+                if (dto.newsUrl.contains("https://www.ferra.ru/news/")) {
+                    resultList.add(dto)
+                }
+            }
+        }
         resultList.addAll(tdnewsConverter(vkTdnewsApi, page))
         return resultList.sortedByDescending { it.date.toInt() }
     }
