@@ -20,7 +20,7 @@ class VkAllNewsHelperImpl(
     override fun getNews(): LiveData<PagingData<VkAllNewsDTO>> {
         return Pager(
             config = PagingConfig(
-                pageSize = VkHelpData.PAGE_SIZE * 3,
+                pageSize = VkHelpData.ALL_NEWS_PAGE_SIZE,
                 enablePlaceholders = true,
                 initialLoadSize = VkHelpData.INITIAL_LOAD_SIZE
             ),

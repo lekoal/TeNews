@@ -84,7 +84,6 @@ class VkDataToAllNewsDTOConverter(
                         imageUrl = size.url
                     }
                 }
-                println("id: $id\ndomain: $ownerDomain\ndate: $date\ntitle: $title\ndescription: $description\nurl: $newsUrl\nimage: $imageUrl")
                 ferraResultList.add(
                     VkAllNewsDTO(
                         id,
