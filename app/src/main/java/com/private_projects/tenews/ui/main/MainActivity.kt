@@ -123,8 +123,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun fragmentRefresh(fragment: Int) {
-        viewPagerAdapter.fragments[fragment].onPause()
-        viewPagerAdapter.fragments[fragment].onResume()
+        viewPagerAdapter.fragments[fragment].refresh()
     }
 
     fun blockDetails(isBlock: Boolean) {

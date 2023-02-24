@@ -6,17 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.Fragment
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.private_projects.tenews.R
 import com.private_projects.tenews.databinding.FragmentAllNewsBinding
+import com.private_projects.tenews.domain.RefreshFragmentContract
 import com.private_projects.tenews.ui.main.MainActivity
 import com.private_projects.tenews.utils.ConnectionStatus
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 
-class AllNewsFragment : Fragment() {
+class AllNewsFragment : RefreshFragmentContract() {
     private val scope by lazy {
         getKoin().getOrCreateScope<AllNewsFragment>(SCOPE_ID)
     }
@@ -104,12 +104,16 @@ class AllNewsFragment : Fragment() {
     private fun showProgress() {
         adapter.addLoadStateListener { state ->
             parentActivity.setProgress(state.refresh is LoadState.Loading)
-            binding.allNewsRv.smoothScrollToPosition(0)
+            binding.allNewsRv.scrollToPosition(0)
         }
     }
 
     override fun onDestroy() {
         _binding = null
         super.onDestroy()
+    }
+
+    override fun refresh() {
+        getNews()
     }
 }

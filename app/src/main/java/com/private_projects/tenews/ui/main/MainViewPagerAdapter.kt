@@ -3,6 +3,7 @@ package com.private_projects.tenews.ui.main
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.private_projects.tenews.domain.RefreshFragmentContract
 import com.private_projects.tenews.ui.allnews.AllNewsFragment
 import com.private_projects.tenews.ui.ferra.FerraNewsFragment
 import com.private_projects.tenews.ui.ixbt.IxbtNewsFragment
@@ -10,7 +11,7 @@ import com.private_projects.tenews.ui.tdnews.TDNewsFragment
 
 class MainViewPagerAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
-    val fragments: Array<Fragment> by lazy {
+    val fragments: Array<RefreshFragmentContract> by lazy {
         arrayOf(
             AllNewsFragment(), IxbtNewsFragment(), FerraNewsFragment(), TDNewsFragment()
         )
