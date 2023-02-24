@@ -58,6 +58,7 @@ class AllNewsFragment : Fragment() {
         initRV()
         itemClickListener()
         showProgress()
+        getNews()
     }
 
     private fun checkConnection() {
@@ -75,7 +76,6 @@ class AllNewsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         checkConnection()
-        getNews()
     }
 
     companion object {

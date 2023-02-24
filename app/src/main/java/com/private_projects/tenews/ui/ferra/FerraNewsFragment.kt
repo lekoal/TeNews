@@ -62,6 +62,7 @@ class FerraNewsFragment : Fragment() {
         initRV()
         itemClickListener()
         showProgress()
+        getNews()
     }
 
     private fun checkConnection() {
@@ -79,7 +80,6 @@ class FerraNewsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         checkConnection()
-        getNews()
     }
 
     private fun initRV() {
