@@ -1,5 +1,6 @@
 package com.private_projects.tenews.utils
 
+import com.private_projects.tenews.data.VkHelpData
 import com.rometools.rome.feed.synd.SyndEntry
 import com.rometools.rome.feed.synd.SyndFeed
 import com.rometools.rome.io.SyndFeedInput
@@ -9,7 +10,7 @@ import java.net.URL
 class RssCommon(private val rss: String) {
     private var success = false
     private var feed: SyndFeed? = null
-    fun get(): List<SyndEntry>? {
+    fun get(page: Int): List<SyndEntry>? {
         try {
             val rssUrl = URL(rss)
             val rssInputStream = rssUrl.openStream()
@@ -20,7 +21,8 @@ class RssCommon(private val rss: String) {
             e.printStackTrace()
             success = false
         }
-        return feed?.entries
+        val pagedFeed = feed?.entries?.chunked(VkHelpData.PAGE_SIZE)
+        return pagedFeed?.get(page)
     }
     fun isSuccess(): Boolean {
         return success

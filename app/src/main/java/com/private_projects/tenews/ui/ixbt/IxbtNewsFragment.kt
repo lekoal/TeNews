@@ -92,12 +92,6 @@ class IxbtNewsFragment : RefreshFragmentContract() {
         viewModel.getIxbtNews().observe(viewLifecycleOwner) { pagingData ->
             adapter.submitData(lifecycle, pagingData)
         }
-        viewModel.getIxbtRss()
-        viewModel.rssData.observe(viewLifecycleOwner) { list ->
-            list.forEach {
-                println(it.title)
-            }
-        }
     }
 
     private fun itemClickListener() {
