@@ -2,14 +2,14 @@ package com.private_projects.tenews.utils
 
 import com.private_projects.tenews.data.VkHelpData
 import com.private_projects.tenews.data.allnews.VkAllNewsDTO
-import com.private_projects.tenews.domain.ferra.VkFerraApi
 import com.private_projects.tenews.domain.ixbt.VkIxbtApi
-import com.private_projects.tenews.domain.tdnews.VkTdnewsApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class VkDataToAllNewsDTOConverter(
     private val vkIxbtApi: VkIxbtApi,
-    private val vkFerraApi: VkFerraApi,
-    private val vkTdnewsApi: VkTdnewsApi
+    private val rssFerra: RssCommon,
+    private val rssTDNews: RssCommon
 ) {
     suspend fun convert(page: Int): List<VkAllNewsDTO> {
         val resultList = mutableListOf<VkAllNewsDTO>()
@@ -20,14 +20,17 @@ class VkDataToAllNewsDTOConverter(
                 }
             }
         }
-        ferraConverter(vkFerraApi, page).let { list ->
+        ferraConverter(rssFerra, page).let { list ->
             list.forEach { dto ->
-                if (dto.newsUrl.contains("https://www.ferra.ru/news/")) {
-                    resultList.add(dto)
-                }
+                resultList.add(dto)
             }
         }
-        resultList.addAll(tdnewsConverter(vkTdnewsApi, page))
+        tdnewsConverter(rssTDNews, page).let { list ->
+            list.forEach { dto ->
+                resultList.add(dto)
+            }
+        }
+
         return resultList.sortedByDescending { it.date.toInt() }
     }
 
@@ -67,69 +70,64 @@ class VkDataToAllNewsDTOConverter(
         return ixbtResultList
     }
 
-    private suspend fun ferraConverter(vkFerraApi: VkFerraApi, page: Int): List<VkAllNewsDTO> {
-        val ferraList = vkFerraApi.getNews(page = page)
-        val ferraResultList = mutableListOf<VkAllNewsDTO>()
-        if (ferraList.isSuccessful) {
-            ferraList.body()?.response?.items?.forEach { item ->
-                val id = item.id
-                val ownerDomain = VkHelpData.FERRA_DOMAIN
-                val date = item.date.toString()
-                val title = item.attachments[0].link.title
-                val description = item.attachments[0].link.description
-                val newsUrl = item.attachments[0].link.url
-                var imageUrl = ""
-                item.attachments[0].link.photo?.sizes?.forEach { size ->
-                    if (size.type == "p" || size.type == "l") {
-                        imageUrl = size.url
-                    }
-                }
-                ferraResultList.add(
-                    VkAllNewsDTO(
-                        id,
-                        ownerDomain,
-                        date,
-                        title,
-                        description,
-                        imageUrl,
-                        newsUrl
+    private suspend fun ferraConverter(rssFerra: RssCommon, page: Int): List<VkAllNewsDTO> {
+        return withContext(Dispatchers.IO) {
+            val ferraList = rssFerra.get(page = page)
+            val ferraResultList = mutableListOf<VkAllNewsDTO>()
+            if (rssFerra.isSuccess()) {
+                ferraList?.forEach { item ->
+                    val id = item.title.hashCode()
+                    val ownerDomain = VkHelpData.FERRA_DOMAIN
+                    val date = (item.publishedDate.time / 1000).toString()
+                    val title = item.title
+                    val description = item.description.value
+                    val newsUrl = item.link
+                    val imageUrl = item.enclosures[0].url
+
+                    ferraResultList.add(
+                        VkAllNewsDTO(
+                            id,
+                            ownerDomain,
+                            date,
+                            title,
+                            description,
+                            imageUrl,
+                            newsUrl
+                        )
                     )
-                )
+                }
             }
+            ferraResultList
         }
-        return ferraResultList
     }
 
-    private suspend fun tdnewsConverter(vkTdnewsApi: VkTdnewsApi, page: Int): List<VkAllNewsDTO> {
-        val tdnewsList = vkTdnewsApi.getNews(page = page)
-        val tdnewsResultList = mutableListOf<VkAllNewsDTO>()
-        if (tdnewsList.isSuccessful) {
-            tdnewsList.body()?.response?.items?.forEach { item ->
-                val id = item.id
-                val ownerDomain = VkHelpData.TDNEWS_DOMAIN
-                val date = item.date.toString()
-                val title = item.attachments[0].link?.title.toString()
-                val description = item.attachments[0].link?.description.toString()
-                val newsUrl = item.attachments[0].link?.url.toString()
-                var imageUrl = ""
-                item.attachments[0].link?.photo?.sizes?.forEach { size ->
-                    if (size.type == "p" || size.type == "l") {
-                        imageUrl = size.url
-                    }
-                }
-                tdnewsResultList.add(
-                    VkAllNewsDTO(
-                        id,
-                        ownerDomain,
-                        date,
-                        title,
-                        description,
-                        imageUrl,
-                        newsUrl
+    private suspend fun tdnewsConverter(rssTDNews: RssCommon, page: Int): List<VkAllNewsDTO> {
+        return withContext(Dispatchers.IO) {
+            val tdnewsList = rssTDNews.get(page = page)
+            val tdnewsResultList = mutableListOf<VkAllNewsDTO>()
+            if (rssTDNews.isSuccess()) {
+                tdnewsList?.forEach { item ->
+                    val id = item.title.hashCode()
+                    val ownerDomain = VkHelpData.TDNEWS_DOMAIN
+                    val date = (item.publishedDate.time / 1000).toString()
+                    val title = item.title
+                    val description = item.description.value
+                    val newsUrl = item.link
+                    val imageUrl = item.enclosures[0].url
+                    tdnewsResultList.add(
+                        VkAllNewsDTO(
+                            id,
+                            ownerDomain,
+                            date,
+                            title,
+                            description,
+                            imageUrl,
+                            newsUrl
+                        )
                     )
-                )
+                }
             }
+            tdnewsResultList
         }
-        return tdnewsResultList
     }
 }

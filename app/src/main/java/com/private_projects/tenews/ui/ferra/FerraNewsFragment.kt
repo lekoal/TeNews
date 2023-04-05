@@ -89,13 +89,14 @@ class FerraNewsFragment : RefreshFragmentContract() {
     }
 
     private fun getNews() {
-        viewModel.getFerraNews().observe(viewLifecycleOwner) { pagingData ->
+        viewModel.getRss().observe(viewLifecycleOwner) { pagingData ->
             adapter.submitData(lifecycle, pagingData)
         }
     }
 
     private fun itemClickListener() {
         adapter.onItemClick = { list ->
+            println(list)
             parentActivity.showDetails(list)
         }
     }

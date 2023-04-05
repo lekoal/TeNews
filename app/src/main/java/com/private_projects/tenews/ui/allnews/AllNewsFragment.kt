@@ -89,11 +89,10 @@ class AllNewsFragment : RefreshFragmentContract() {
     }
 
     private fun getNews() {
-//        viewModel.getAllNews().observe(viewLifecycleOwner) { pagingData ->
-//            adapter.submitData(lifecycle, pagingData)
-//            adapter.notifyItemRangeChanged(0, adapter.itemCount)
-//        }
-
+        viewModel.getAllNews().observe(viewLifecycleOwner) { pagingData ->
+            adapter.submitData(lifecycle, pagingData)
+            adapter.notifyItemRangeChanged(0, adapter.itemCount)
+        }
     }
 
     private fun itemClickListener() {

@@ -8,26 +8,25 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.private_projects.tenews.R
-import com.private_projects.tenews.data.VkHelpData
-import com.private_projects.tenews.data.tdnews.VkTdnewsDTO
+import com.private_projects.tenews.data.rssnews.RssDTO
 import com.private_projects.tenews.databinding.NewsRvItemBinding
-import com.private_projects.tenews.utils.TimestampConverter
+import com.private_projects.tenews.utils.RssDateFormatter
 
 class TDNewsPagerAdapter :
-    PagingDataAdapter<VkTdnewsDTO.Response.Item, TDNewsPagerAdapter.ViewHolder>(NewsComparator) {
+    PagingDataAdapter<RssDTO, TDNewsPagerAdapter.ViewHolder>(NewsComparator) {
     var onItemClick: ((List<String>) -> Unit)? = null
 
-    object NewsComparator : DiffUtil.ItemCallback<VkTdnewsDTO.Response.Item>() {
+    object NewsComparator : DiffUtil.ItemCallback<RssDTO>() {
         override fun areItemsTheSame(
-            oldItem: VkTdnewsDTO.Response.Item,
-            newItem: VkTdnewsDTO.Response.Item
+            oldItem: RssDTO,
+            newItem: RssDTO
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: VkTdnewsDTO.Response.Item,
-            newItem: VkTdnewsDTO.Response.Item
+            oldItem: RssDTO,
+            newItem: RssDTO
         ): Boolean {
             return oldItem == newItem
         }
@@ -35,27 +34,15 @@ class TDNewsPagerAdapter :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val newsItem = getItem(position)
-        val title = newsItem?.attachments?.get(0)?.link?.title.toString()
-        val newsText = newsItem?.attachments?.get(0)?.link?.description.toString()
-        var imageUrl = ""
-        val newsUrl = newsItem?.attachments?.get(0)?.link?.url.toString()
-        val converter = TimestampConverter()
-        val date = newsItem?.date?.let { converter.convert(it) }
-        newsItem?.attachments?.get(0)?.link?.photo?.sizes?.forEach { size ->
-            if (size.type == "p" || size.type == "l") {
-                imageUrl = size.url
-            }
-        }
-
-        holder.title.text = title
-        holder.author.text = VkHelpData.TDNEWS_DOMAIN
-        holder.dateTime.text = date
-        holder.description.text = newsText
-
-        if (imageUrl != "") {
+        val rssDateFormatter = RssDateFormatter()
+        holder.title.text = newsItem?.title
+        holder.dateTime.text = newsItem?.date?.let { rssDateFormatter.format(it) }
+        holder.description.text = newsItem?.description?.trimStart()
+        holder.author.text = newsItem?.ownerDomain
+        if (newsItem?.imageUrl != "") {
             holder.image.apply {
                 scaleType = ImageView.ScaleType.CENTER_CROP
-                load(imageUrl) {
+                load(newsItem?.imageUrl) {
                     placeholder(R.drawable.placeholder)
                     size(200, 100)
                     crossfade(true)
@@ -77,10 +64,10 @@ class TDNewsPagerAdapter :
         holder.itemView.setOnClickListener {
             onItemClick?.invoke(
                 listOf(
-                    newsUrl,
+                    newsItem?.newsUrl.toString(),
                     newsItem?.id.toString(),
-                    VkHelpData.TDNEWS_DOMAIN,
-                    date ?: ""
+                    newsItem?.ownerDomain.toString(),
+                    newsItem?.date.toString()
                 )
             )
         }

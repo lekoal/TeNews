@@ -10,4 +10,5 @@ class AllNewsViewModel(private val allNewsHelper: VkAllNewsHelper) : ViewModel()
     fun getAllNews(): LiveData<PagingData<VkAllNewsDTO>> {
         return allNewsHelper.getNews()
     }
+
 }

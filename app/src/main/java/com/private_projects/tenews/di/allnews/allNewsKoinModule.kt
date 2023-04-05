@@ -12,8 +12,8 @@ val allNewsKoinModule = module {
     single<VkAllNewsHelper>(named("all_news_helper")) {
         VkAllNewsHelperImpl(
             get(named("ixbt_api")),
-            get(named("ferra_api")),
-            get(named("tdnews_api"))
+            get(named("rss_ferra")),
+            get(named("rss_tdnews"))
         )
     }
     scope<AllNewsFragment> {

@@ -7,15 +7,14 @@ import androidx.paging.PagingData
 import androidx.paging.liveData
 import com.private_projects.tenews.data.VkHelpData
 import com.private_projects.tenews.domain.allnews.VkAllNewsHelper
-import com.private_projects.tenews.domain.ferra.VkFerraApi
 import com.private_projects.tenews.domain.ixbt.VkIxbtApi
-import com.private_projects.tenews.domain.tdnews.VkTdnewsApi
+import com.private_projects.tenews.utils.RssCommon
 import com.private_projects.tenews.utils.VkDataToAllNewsDTOConverter
 
 class VkAllNewsHelperImpl(
     private val vkIxbtApi: VkIxbtApi,
-    private val vkFerraApi: VkFerraApi,
-    private val vkTdnewsApi: VkTdnewsApi
+    private val rssFerra: RssCommon,
+    private val rssTDNews: RssCommon
 ) : VkAllNewsHelper {
     override fun getNews(): LiveData<PagingData<VkAllNewsDTO>> {
         return Pager(
@@ -28,8 +27,8 @@ class VkAllNewsHelperImpl(
                 VkAllNewsPagingSource(
                     VkDataToAllNewsDTOConverter(
                         vkIxbtApi,
-                        vkFerraApi,
-                        vkTdnewsApi
+                        rssFerra,
+                        rssTDNews
                     )
                 )
             },
