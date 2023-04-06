@@ -131,7 +131,7 @@ class DetailsFragment : Fragment() {
 
     private fun setViews(entity: NewsDetailsEntity) {
         binding.detailsFirstTitle.text = entity.header.firstTitle
-        if (entity.header.secondTitle != null) {
+        if (!entity.header.secondTitle.isNullOrEmpty()) {
             binding.detailsSecondTitle.visibility = View.VISIBLE
             binding.detailsSecondTitle.text = entity.header.secondTitle
         } else {
