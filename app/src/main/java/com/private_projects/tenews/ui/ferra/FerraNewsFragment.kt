@@ -96,7 +96,6 @@ class FerraNewsFragment : RefreshFragmentContract() {
 
     private fun itemClickListener() {
         adapter.onItemClick = { list ->
-            println(list)
             parentActivity.showDetails(list)
         }
     }

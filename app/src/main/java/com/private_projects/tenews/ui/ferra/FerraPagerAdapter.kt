@@ -35,8 +35,9 @@ class FerraPagerAdapter :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val newsItem = getItem(position)
         val rssDateFormatter = RssDateFormatter()
+        val date = newsItem?.date?.let { rssDateFormatter.format(it) } ?: ""
         holder.title.text = newsItem?.title
-        holder.dateTime.text = newsItem?.date?.let { rssDateFormatter.format(it) }
+        holder.dateTime.text = date
         holder.description.text = newsItem?.description
         holder.author.text = newsItem?.ownerDomain
         if (newsItem?.imageUrl != "") {
@@ -67,7 +68,7 @@ class FerraPagerAdapter :
                     newsItem?.newsUrl.toString(),
                     newsItem?.id.toString(),
                     newsItem?.ownerDomain.toString(),
-                    newsItem?.date.toString()
+                    date
                 )
             )
         }

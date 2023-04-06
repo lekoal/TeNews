@@ -14,14 +14,12 @@ import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.size.Scale
 import com.private_projects.tenews.R
-import com.private_projects.tenews.data.VkHelpData
 import com.private_projects.tenews.data.details.NewsDetailsEntity
 import com.private_projects.tenews.databinding.FragmentDetailsBinding
 import com.private_projects.tenews.ui.main.FERRA_NEWS_FRAGMENT
 import com.private_projects.tenews.ui.main.IXBT_NEWS_FRAGMENT
 import com.private_projects.tenews.ui.main.MainActivity
 import com.private_projects.tenews.ui.main.TD_NEWS_FRAGMENT
-import com.private_projects.tenews.utils.RssDateFormatter
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
@@ -144,18 +142,7 @@ class DetailsFragment : Fragment() {
             binding.detailAuthor.visibility = View.VISIBLE
             binding.detailAuthor.text = entity.header.ownerDomain
         }
-
-        when (entity.header.ownerDomain) {
-            VkHelpData.IXBT_DOMAIN -> {
-                binding.detailsDate.text = entity.header.newsDate
-            }
-            else -> {
-                val rssDateFormatter = RssDateFormatter()
-                val date = rssDateFormatter.toDateFormat(entity.header.newsDate)
-                binding.detailsDate.text = rssDateFormatter.format(date)
-            }
-        }
-
+        binding.detailsDate.text = entity.header.newsDate
         binding.detailsContent.let { layout ->
             layout.removeAllViews()
             for (i in 0 .. receiveMaxPosition(entity)) {

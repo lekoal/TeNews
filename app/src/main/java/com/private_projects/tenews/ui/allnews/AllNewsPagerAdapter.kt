@@ -35,9 +35,10 @@ class AllNewsPagerAdapter :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val newsItem = getItem(position)
         val timestampConverter = TimestampConverter()
+        val date = newsItem?.date?.toInt()?.let { timestampConverter.convert(it) } ?: ""
 
         holder.title.text = newsItem?.title
-        holder.dateTime.text = newsItem?.date?.toInt()?.let { timestampConverter.convert(it) }
+        holder.dateTime.text = date
         holder.description.text = newsItem?.description?.trimStart()
         holder.author.text = newsItem?.ownerDomain
         if (newsItem?.imageUrl != "") {
@@ -68,7 +69,7 @@ class AllNewsPagerAdapter :
                     newsItem?.newsUrl.toString(),
                     newsItem?.id.toString(),
                     newsItem?.ownerDomain.toString(),
-                    newsItem?.date.toString()
+                    date
                 )
             )
         }
