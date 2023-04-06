@@ -14,12 +14,14 @@ import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.size.Scale
 import com.private_projects.tenews.R
+import com.private_projects.tenews.data.VkHelpData
 import com.private_projects.tenews.data.details.NewsDetailsEntity
 import com.private_projects.tenews.databinding.FragmentDetailsBinding
 import com.private_projects.tenews.ui.main.FERRA_NEWS_FRAGMENT
 import com.private_projects.tenews.ui.main.IXBT_NEWS_FRAGMENT
 import com.private_projects.tenews.ui.main.MainActivity
 import com.private_projects.tenews.ui.main.TD_NEWS_FRAGMENT
+import com.private_projects.tenews.utils.RssDateFormatter
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
@@ -136,8 +138,23 @@ class DetailsFragment : Fragment() {
             binding.detailsSecondTitle.visibility = View.GONE
         }
 
-        binding.detailAuthor.text = entity.header.ownerDomain
-        binding.detailsDate.text = entity.header.newsDate
+        if (entity.header.ownerDomain.isEmpty()) {
+            binding.detailAuthor.visibility = View.GONE
+        } else {
+            binding.detailAuthor.visibility = View.VISIBLE
+            binding.detailAuthor.text = entity.header.ownerDomain
+        }
+
+        when (entity.header.ownerDomain) {
+            VkHelpData.IXBT_DOMAIN -> {
+                binding.detailsDate.text = entity.header.newsDate
+            }
+            else -> {
+                val rssDateFormatter = RssDateFormatter()
+                val date = rssDateFormatter.toDateFormat(entity.header.newsDate)
+                binding.detailsDate.text = rssDateFormatter.format(date)
+            }
+        }
 
         binding.detailsContent.let { layout ->
             layout.removeAllViews()

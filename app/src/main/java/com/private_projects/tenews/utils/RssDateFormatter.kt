@@ -18,4 +18,11 @@ class RssDateFormatter {
             outputDate.toString()
         }
     }
+    fun toDateFormat(date: String): Date {
+        return try {
+            inputFormatA.parse(date) as Date
+        } catch (e: Exception) {
+            inputFormatB.parse(date) as Date
+        }
+    }
 }
